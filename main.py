@@ -32,8 +32,9 @@ class Character:
 
 class Protagonist(Character):
     '''A subclass for the characteristic of the main protagonist, adding alignment and magic as attributes'''
-    def __init__(self, name, race, hp, inventory, alignment=0, hand=2):
+    def __init__(self, name, race, hp, inventory, party, alignment=0, hand=2):
         super().__init__(name, race, hp, inventory)
+        self.party = party
         self.alignment = alignment
         self.hand = hand
     def attack_dmg(self):
@@ -123,6 +124,7 @@ def death():
     contin = pyip.inputYesNo()
     if contin == 'yes':
         startingPoint()
+        return
     else:
         sys.exit()
 
@@ -131,6 +133,43 @@ def meadow():
 
 
 def caveOne():
+
+    def addToParty():
+        print('--Will you join forces with Hop the Goblin?---')
+        addToParty = pyip.inputYesNo()
+        if addToParty == 'yes':
+            hero.party.append('Hop')
+            time.sleep(1)
+            print('''Great! Let's go!''')
+            time.sleep(1)
+            print('''--That's a very enthusiastic party member you just gained''')
+        else:
+            time.sleep(1)
+            print('''If that's what you want... we'll split as soon as we get out of here''')
+            hop.change_friend(-5)
+
+        print('''--Both of you, using the goblin's torch as source of light, search for a way out--''')
+        if 'Hop' in hero.party:
+            print('''Do you remember anything?''')
+            time.sleep(1)
+            print('''--You don't--''')
+            time.sleep(1)
+            print('''Me too... But we must be adventurers! Maybe we were attacked and ended up braindamaged in a cave?''')
+            time.sleep(1)
+            print('''--That does make sense--''')
+            time.sleep(1)
+            hop.change_friend(2)
+            print('''--After a moment of friendly banter you reach the exit--''')
+        else:
+            print('''--After a moment of awkward silence you reach the exit--''')
+            time.sleep(1)
+            print('''So this is where we part ways''')
+            time.sleep(1)
+            print('''--Said the goblin and walked away without looking--''')
+            time.sleep(1)
+            print('''--Do you hear... sniffling?--''')
+
+
     print('''--A face emerges from the darkness, illuminated by a small makeshift torch. It is...''')
     time.sleep(1.5)
     if hero.race.lower() == 'goblin':
@@ -165,10 +204,31 @@ def caveOne():
             print('''So I stayed right here and waited for you to wake up too!''')
             time.sleep(1)
             print('''I woke up not long ago and almost had a heart attack, so I wanted to spare you the shock as much as I could''')
+            time.sleep(1)
+            print('''I think we should look team up, we don't know what is out there''')
+            time.sleep(1)
+            addToParty()
 
+        elif ans.upper() == 'B':
+            hop.change_friend(-3)
+            if hero.race.lower() != 'goblin':
+                print('''Why would I... is it because I am a goblin?''')
+            else:
+                print('''Why would I attack my brethren?''')
+            time.sleep(1)
+            print('''No no no, I waited for you to get up so we can leave this place!''')
+            if hop.friend < 0:
+                print('''...But now I think we maybe should split up as soon as we get out''')
+                time.sleep(1)
+                print('''--The goblin looks sad--''')
+            else:
+                time.sleep(1)
+                print('Shall we go outside together?')
+                time.sleep(1)
+                addToParty()
 
-
-
+        break
+    meadow()
 
 def attackHop():
     bad_hop = Enemy(hop.name, hop.race, hop.hp, hop.inventory, 0.5)
@@ -190,14 +250,14 @@ def attackHop():
     print('''--Will you take it?--''')
     coin = pyip.inputYesNo()
     if coin == 'yes':
-        print('You took the coin')
+        print('--You took the coin--')
         hero.inventory.append('old coin')
         hero.change_align(-5)
     else:
-        print('You decide to leave the coin with its previous unfortunate owner')
+        print('--You decide to leave the coin with its previous unfortunate owner--')
         hero.change_align(2)
     time.sleep(1)
-    print('You decide to look for the exit')
+    print('--You start looking for the exit--')
     meadow()
 
 # THE BEGINNING
@@ -211,7 +271,7 @@ def startingPoint():
     print('What race would you like to become?:')
     heroRace = input()
     global hero
-    hero = Protagonist(heroName, heroRace, 9, [])
+    hero = Protagonist(heroName, heroRace, 9, [], [])
 
     print('''--You wake up in a dark cold place. You feel the rocks beneath you. You also feel strangely calm,
     (as if you didn't just wake up in a dark cold place). You begin to lift your head from the ground to take a look around when suddenly...--''')
@@ -261,7 +321,7 @@ def startingPoint():
             hero.change_align(-10)
             hop.change_friend(-7)
             attackHop()
-            break
+            return
         elif ans.upper() not in ('A', 'B', 'C', 'D'):
             print('--You little rebel. Please enter A B C or D--')
             time.sleep(1)
