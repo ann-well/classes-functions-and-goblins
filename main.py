@@ -78,7 +78,7 @@ class Enemy(Character):
         self.power = power
 
     def enemy_rage(self):
-        self.power = self.power + 2
+        self.power = self.power * 2
 
     def attack_dmg(self):
         return int(random.randint(4,6) * self.power)
@@ -122,6 +122,7 @@ def fight(attacker, defender):  #  dodac object hints, musi byc to character cla
 def death():
     print('''You've reached the end of your adventure.''')
     time.sleep(1)
+    print('You\'ve fought this fight {} times'.format(TIMES_PLAYED))
     print('''Worms are slowly starting to circle your lifeless body, like tiny wingless vultures.''')
     time.sleep(1)
     print('''Soon your flesh will become nothing more than just their food''')
@@ -161,7 +162,7 @@ def meadow():
     A - *Make yourself smaller and approach the badger slowly, with an outstreched hand.*
     B - *Stare back at him*
     C - Hello, badger!
-    D - *attack the badger before he gets the chance to attack*''')
+    D - *attack the badger before he gets the chance to strike first*''')
         ans = input()
         while True:
             if ans.upper() not in ['A', 'B', 'C', 'D']:
@@ -212,7 +213,7 @@ def meadow():
                     printTalk('NOOO!')
                     printInner('''Hop shouts, but you are unstoppable''')
                 printInner('''The beast is surprisingly agile!''')
-                printInner('''He slithers its way from your attempts to grapple him and bites your hand''')
+                printInner('''He slithers his way from your attempts to grapple him and bites your hand''')
                 printInner('''You feel a sharp pain, look down on the badger...''')
                 printInner('''He is currently running away with''')
                 printInner('YOUR HAND')
@@ -223,20 +224,90 @@ def meadow():
                     printInner('''You hear Hop running after you. He is also screaming''')
                 break
     def event2():
+        printInner('''You spot some rubble in the thick grass nearby.''')
+        printInner('''Upon closer inspection it seems that it was, at some point... a gravestone?''')
+        printInner('You look around')
+        printInner('''Now you notice it: you are surrounded by dilapidated graves''')
+        if 'Hop' in hero.party:
+            printInner('''Hop moved closer to one of them''')
+            printTalk('Here lies... Ongar the Great {}'.format(hero.race).title())
+            printTalk('''Poor soul...''')
+        else:
+            printInner('''You read the inscription on one of the less broken stones''')
+            printInner('Here lies... Ongar the Great {}'.format(hero.race).title())
+        printInner('''You vaguely recognize this name...''')
+        printInner('''The only other inscription that is partially readable is''')
+        printInner('''....p the Gobli..''')
+        if 'Hop' in hero.party:
+            printInner('''Hop looks at this one with sadness, and lowers his head in a silent prayer''')
+        time.sleep(1)
+        print('''---What will you do?---
+    A - *ignore the graveyard and move on*
+    B - *pluck some flowers and put them near the stones*
+    C - *search for loot*
+    D - *kick the goblin grave*''')
+        ans = input()
+        while True:
+            if ans.upper() not in ['A', 'B', 'C', 'D']:
+                print('Please choose A B C or D')
+                continue
+            elif ans.upper() == 'A':
+                hero.change_align(-3)
+                if 'Hop' in hero.party:
+                    hop.change_friend(-2)
+                    printInner('''Hop looks at you with disapproval''')
+                printInner('''You enter the woods''')
+                break
+            elif ans.upper() == 'B':
+                hero.change_align(3)
+                printInner('You honoured the fallen and moved on into the woods')
+                if 'Hop' in hero.party:
+                    hop.change_friend(4)
+                    printTalk('''...Thank you''')
+            elif ans.upper() == 'C':
+                printInner('''You decided to become a graverobber''')
+                hero.change_align(-4)
+                if 'Hop' in hero.party:
+                    printInner('''Hop looks at you''')
+                    printTalk('''Are you sure this is what you want to do?''')
+                    grave = pyip.inputYesNo()
+                    if grave == 'no':
+                        printInner('''After some consideration... no. It's not the greatest idea''')
+                        hero.change_align(1)
+                    else:
+                        printInner('''Yes it is''')
+                        hop.change_friend(-5)
+                printInner('''After some unholy searching you find''')
+                printInner('''nothing. Hope it was worth it''')
+                break
+            elif ans.upper() == 'D':
+                hero.change_align(-7)
+                if 'Hop' in hero.party:
+                    hop.change_friend(-10)
+                    printTalk('What are you doing?!')
+                    printInner('''Hop looks at you in complete and utter shock''')
+                    printInner('''You kick the grave again''')
+                    printTalk('''You dick.''')
+                    printInner('''The goblin draws a sword and charges at you''')
+                    bad_hop = Enemy(hop.name, hop.race, hop.hp, hop.inventory, 0.5)
+                    bad_hop.enemy_rage()
+                    initiative = random.randint(1,2)
+                    if initiative == 1:
+                        fight(hero, bad_hop)
+                    else:
+                        fight(bad_hop, hero)
 
 
-    def event2():
-        pass
     def event3():
         pass
 
     event = random.randint(1,3)
     if event == 1:
-        event1()
+        event2()
     elif event == 2:
         event2()
     elif event == 3:
-        event1()
+        event2()
 
 
 def caveOne():
@@ -299,7 +370,7 @@ def caveOne():
             printTalk('''I woke up not long ago and almost had a heart attack, so I wanted to spare you the shock as much as I could''')
             printTalk('''I think we should look team up, we don't know what is out there''')
             addToParty()
-
+            break
         elif ans.upper() == 'B':
             hop.change_friend(-3)
             if hero.race.lower() != 'goblin':
@@ -313,8 +384,24 @@ def caveOne():
             else:
                 printTalk('Shall we go outside together?')
                 addToParty()
-
-        break
+            break
+        elif ans.upper() == 'C':
+            printTalk('''Are you okay?''')
+            hop.change_friend(-2)
+            hero.change_align(-1)
+            printTalk('''I'm not gonna hurt you!''')
+            printTalk('''I waited for you to get up so we can leave this place!''')
+            if hop.friend < 0:
+                printTalk('''...But now I think we maybe should split up as soon as we get out''')
+                printInner('''The goblin looks sad''')
+            else:
+                printTalk('Shall we go outside together?')
+                addToParty()
+            break
+        elif ans.upper() == 'D':
+            printInner('''You strike fast, so that this treacherous being wouldn't have a chance to do anything''')
+            attackHop()
+            break
     meadow()
 
 def attackHop():
