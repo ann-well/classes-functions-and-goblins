@@ -3,7 +3,16 @@ import random, sys, time
 import pyinputplus as pyip
 
 #global timesPlayed
-#timesPlayed = 0
+global TIMES_PLAYED
+TIMES_PLAYED = 0
+
+def printTalk(charLine):
+    time.sleep(1)
+    print('--', charLine, '--')
+
+def printInner(innerLine):
+    time.sleep(1)
+    print(innerLine)
 
 class Character:
     """A class containing basic information about characters"""
@@ -135,54 +144,43 @@ def meadow():
 def caveOne():
 
     def addToParty():
-        print('--Will you join forces with Hop the Goblin?---')
+        printInner('Will you join forces with Hop the Goblin?')
         addToParty = pyip.inputYesNo()
         if addToParty == 'yes':
             hero.party.append('Hop')
-            time.sleep(1)
-            print('''Great! Let's go!''')
-            time.sleep(1)
-            print('''--That's a very enthusiastic party member you just gained''')
+            printTalk('''Great! Let's go!''')
+            printInner('''That's a very enthusiastic party member you just gained''')
         else:
-            time.sleep(1)
-            print('''If that's what you want... we'll split as soon as we get out of here''')
+            printTalk('''If that's what you want... we'll split as soon as we get out of here''')
             hop.change_friend(-5)
 
-        print('''--Both of you, using the goblin's torch as source of light, search for a way out--''')
+        printInner('''Both of you, using the goblin's torch as source of light, search for a way out''')
         if 'Hop' in hero.party:
-            print('''Do you remember anything?''')
-            time.sleep(1)
-            print('''--You don't--''')
-            time.sleep(1)
-            print('''Me too... But we must be adventurers! Maybe we were attacked and ended up braindamaged in a cave?''')
-            time.sleep(1)
-            print('''--That does make sense--''')
-            time.sleep(1)
+            printTalk('''Do you remember anything?''')
+            printInner('''You don't''')
+            printTalk('''Me too... But we must be adventurers! Maybe we were attacked and ended up braindamaged in a cave?''')
+            printInner('''That does make sense''')
             hop.change_friend(2)
-            print('''--After a moment of friendly banter you reach the exit--''')
+            printInner('''After a moment of friendly banter you reach the exit''')
         else:
-            print('''--After a moment of awkward silence you reach the exit--''')
-            time.sleep(1)
-            print('''So this is where we part ways''')
-            time.sleep(1)
-            print('''--Said the goblin and walked away without looking--''')
-            time.sleep(1)
-            print('''--Do you hear... sniffling?--''')
+            printInner('''After a moment of awkward silence you reach the exit''')
+            printTalk('''So this is where we part ways''')
+            printInner('''Said the goblin and walked away without looking''')
+            printInner('''Do you hear... sniffling?''')
 
 
-    print('''--A face emerges from the darkness, illuminated by a small makeshift torch. It is...''')
-    time.sleep(1.5)
+    printInner('''A face emerges from the darkness, illuminated by a small makeshift torch. It is...''')
+    time.sleep(0.5)
     if hero.race.lower() == 'goblin':
-        print('--...a familiar face! It appears to be a fellow goblin--')
+        printInner('...a familiar face! It appears to be a fellow goblin')
         hop.change_friend(5)
     else:
-        print('''--...a goblin face?!--''')
-        time.sleep(1)
+        printInner('''...a goblin face?!''')
         if hero.alignment <= -5:
-            print('''--You don't trust goblins. No one should.--''')
+            printInner('''You don't trust goblins. No one should.''')
             hero.change_align(-1)
         else:
-            print('''--You are quite shocked, but he does seem nice.--''')
+            printInner('''You are quite shocked, but he does seem nice.''')
 
     while True:
         time.sleep(1)
@@ -198,33 +196,24 @@ def caveOne():
         elif ans.upper() == 'A':
             hero.change_align(2)
             hop.change_friend(5)
-            time.sleep(1)
-            print('''Oh it's so nice to finally talk to you! I'm quite alright, but I was worried about you''')
-            time.sleep(1)
-            print('''So I stayed right here and waited for you to wake up too!''')
-            time.sleep(1)
-            print('''I woke up not long ago and almost had a heart attack, so I wanted to spare you the shock as much as I could''')
-            time.sleep(1)
-            print('''I think we should look team up, we don't know what is out there''')
-            time.sleep(1)
+            printTalk('''Oh it's so nice to finally talk to you! I'm quite alright, but I was worried about you''')
+            printTalk('''So I stayed right here and waited for you to wake up too!''')
+            printTalk('''I woke up not long ago and almost had a heart attack, so I wanted to spare you the shock as much as I could''')
+            printTalk('''I think we should look team up, we don't know what is out there''')
             addToParty()
 
         elif ans.upper() == 'B':
             hop.change_friend(-3)
             if hero.race.lower() != 'goblin':
-                print('''Why would I... is it because I am a goblin?''')
+                printTalk('''Why would I... is it because I am a goblin?''')
             else:
-                print('''Why would I attack my brethren?''')
-            time.sleep(1)
-            print('''No no no, I waited for you to get up so we can leave this place!''')
+                printTalk('''Why would I attack my brethren?''')
+            printTalk('''No no no, I waited for you to get up so we can leave this place!''')
             if hop.friend < 0:
-                print('''...But now I think we maybe should split up as soon as we get out''')
-                time.sleep(1)
-                print('''--The goblin looks sad--''')
+                printTalk('''...But now I think we maybe should split up as soon as we get out''')
+                printInner('''The goblin looks sad''')
             else:
-                time.sleep(1)
-                print('Shall we go outside together?')
-                time.sleep(1)
+                printTalk('Shall we go outside together?')
                 addToParty()
 
         break
@@ -232,32 +221,24 @@ def caveOne():
 
 def attackHop():
     bad_hop = Enemy(hop.name, hop.race, hop.hp, hop.inventory, 0.5)
-    print()
     fight(hero, bad_hop)
-    time.sleep(1)
-    print('--A discarded torch is dying slowly, but in its last feint flickers you manage to find a SWORD next to the body--')
-    time.sleep(1)
-    print('''--They... didn't use it against you, although it was within their reach...--''')
-    print('''--You pick up the sword--''')
+    printInner('A discarded torch is dying slowly, but in its last feint flickers you manage to find a SWORD next to the body')
+    printInner('''They... didn't use it against you, although it was within their reach...''')
+    printInner('''You pick up the sword''')
     hero.inventory.append('sword')
-    time.sleep(1)
-    print('''--There's something shiny sticking out of the rugged garments.--''')
-    time.sleep(1)
-    print('''--Upon closer examination it appears to be a OLD COIN--''')
-    time.sleep(0.5)
-    print('--It is a bit bloodied, but looks VERY expensive--')
-    time.sleep(1)
-    print('''--Will you take it?--''')
+    printInner('''There's something shiny sticking out of the rugged garments.''')
+    printInner('''Upon closer examination it appears to be a OLD COIN''')
+    printInner('It is a bit bloodied, but looks VERY expensive')
+    printInner('''Will you take it?''')
     coin = pyip.inputYesNo()
     if coin == 'yes':
-        print('--You took the coin--')
+        printInner('You took the coin')
         hero.inventory.append('old coin')
         hero.change_align(-5)
     else:
-        print('--You decide to leave the coin with its previous unfortunate owner--')
+        printInner('You decide to leave the coin with its previous unfortunate owner')
         hero.change_align(2)
-    time.sleep(1)
-    print('--You start looking for the exit--')
+    printInner('You start looking for the exit')
     meadow()
 
 # THE BEGINNING
@@ -273,14 +254,14 @@ def startingPoint():
     global hero
     hero = Protagonist(heroName, heroRace, 9, [], [])
 
-    print('''--You wake up in a dark cold place. You feel the rocks beneath you. You also feel strangely calm,
-    (as if you didn't just wake up in a dark cold place). You begin to lift your head from the ground to take a look around when suddenly...--''')
-    time.sleep(1.5)
-    print('Hello there my dear adventurer. Fancy seeing you there!')
-    time.sleep(1)
-    print('--You hear a friendly voice, booming through your surroundings--')
-    time.sleep(1)
-    print('''We are in quite a predicament, aren't we?''')
+    global TIMES_PLAYED
+    TIMES_PLAYED = TIMES_PLAYED + 1
+
+    printInner('''You wake up in a dark cold place. You feel the rocks beneath you. You also feel strangely calm,
+(as if you didn't just wake up in a dark cold place). You begin to lift your head from the ground to take a look around when suddenly...''')
+    printTalk('Hello there my dear adventurer. Fancy seeing you there!')
+    printInner('You hear a friendly voice, booming through your surroundings')
+    printTalk('''We are in quite a predicament, aren't we?''')
     time.sleep(1)
     while True:
         print('''---What do you do?---
@@ -290,45 +271,42 @@ def startingPoint():
         D - Where am I?''')
         ans = input()
         if hero.alignment == -5:
-            print('Are you... ignoring me?')
+            printTalk('Are you... ignoring me?')
             hop.change_friend(-3)
-            print('''You reluctantly get up. Darkness still surrounds you, but you decided you don't need friends
+            printInner('''You reluctantly get up. Darkness still surrounds you, but you decided you don't need friends
     on this journey, apparently''')
             time.sleep(1)
             break
         elif ans.upper() == 'A':
-            print('You look around. It is dark and you see nothing')
+            printInner('You look around. It is dark and you see nothing')
             hero.change_align(-1)
             continue
         elif ans.upper() == 'B':
-            print('''...Seriously?
-    Well you're lying on what seems to be rocks, so you try your best but the sleep doesn't come''')
+            printInner('''...Seriously?
+Well you're lying on what seems to be rocks, so you try your best but the sleep doesn't come''')
             hero.change_align(-1)
             continue
         elif ans.upper() == 'C':
-            print('''My name is Hop, and if you turn around you can see me!''')
+            printTalk('''My name is Hop, and if you turn around you can see me!''')
             break
         elif ans.upper() == 'D':
-            print('''In a cave!''')
-            time.sleep(0.5)
-            print('--exclaimed the friendly voice eagerly--')
-            time.sleep(1)
-            print('''You'll have to see for yourself who is talking to you''')
+            printTalk('''In a cave!''')
+            printInner('exclaimed the friendly voice eagerly')
+            printInner('''You'll have to see for yourself who is talking to you''')
             break
 
         elif 'attack' in ans.lower() or 'kill' in ans.lower():
-            print('''--Attack is the best defense. You jump towards the source of the voice, ready to strike---''')
+            printInner('''Attack is the best defense. You jump towards the source of the voice, ready to strike''')
             hero.change_align(-10)
             hop.change_friend(-7)
             attackHop()
             return
         elif ans.upper() not in ('A', 'B', 'C', 'D'):
-            print('--You little rebel. Please enter A B C or D--')
-            time.sleep(1)
+            printInner('You little rebel. Please enter A B C or D')
             continue
 
-    time.sleep(2)
-    print('You turn around to see the owner of the voice')
+    time.sleep(0.5)
+    printInner('You turn around to see the owner of the voice')
     caveOne()
 
 startingPoint()
