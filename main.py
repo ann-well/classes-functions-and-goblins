@@ -137,8 +137,106 @@ def death():
     else:
         sys.exit()
 
+import random
 def meadow():
-    pass
+    printInner('The cave opens up to a pretty scenic view - a quiet little meadow surrounded by trees')
+    if 'Hop' not in hero.party and 'sword' not in hero.inventory:
+        printTalk('''...goodbye then''')
+        printInner('''Hop ran away. You're on your own now''')
+    elif 'Hop' in hero.party and 'sword' not in hero.inventory:
+        printTalk('''Let's fo this, partner!''')
+
+    def event1():
+        printInner('''At the edge of the meadow, in the bushes, you see a faint movement''')
+        printInner('''Before you get the chance to decide if it's worth investigating, something jumps out''')
+        printInner('''It's a BADGER!''')
+        if hero.alignment > 3:
+            printInner('''He's so cute! *.*''')
+            printInner('''You let out an audible gasp''')
+        if 'Hop' in hero.party:
+            printTalk('''You better watch out, they're quite ferocious!''')
+        printInner('''The badger seems to just look at you with his tiny beady eyes''')
+        time.sleep(1)
+        print('''---What will you do?---
+    A - *Make yourself smaller and approach the badger slowly, with an outstreched hand.*
+    B - *Stare back at him*
+    C - Hello, badger!
+    D - *attack the badger before he gets the chance to attack*''')
+        ans = input()
+        while True:
+            if ans.upper() not in ['A', 'B', 'C', 'D']:
+                print('Please choose A B C or D')
+                continue
+            elif ans.upper() == 'A':
+                hero.change_align(5)
+                printInner('''You approach the badger. It looks sweet and innocent. Maybe you can make a new friend!''')
+                printInner('''but SUDDENLY''')
+                printInner('''It attacks you without any warning!''')
+                if 'Hop' in hero.party and hop.friend > 8:
+                    printTalk('''BEGONE DEMON!!!''')
+                    printInner('''Hop put himself between you and the beast!''')
+                    printInner('''The badger sinks its teeth in the sword that Hop had drawn''')
+                    printInner('''The sword broke... Just how strong is this thing?!''')
+                    hop.inventory.remove('sword')
+                    printInner('''You both scream and run into the woods while the badger EATS the metal''')
+                else:
+                    printInner('''The badger sinks its enormous teeth into you hand!''')
+                    printInner('''One chomp and the whole hand is... gone''')
+                    printInner('''Screaming, you run away into the woods''')
+                    printInner('''You haven't made a new friend and you lost your old hand.''')
+                    hero.remove_hand()
+                    if 'Hop' in hero.party:
+                        printTalk('''HE ATE YOUR HAND!!!''')
+                        printInner('''Yes, and bringing it up is not helpful''')
+                        printInner('''Both you and Hop scream some more and enter the woods''')
+                break
+            elif ans.upper() == 'B':
+                hero.change_align(-3)
+                printInner('''The badger bares his teeth. There's a lot of them. More than it should be...''')
+                printInner('''You decide to slowly back away and enter the woods, keeping an eye on the tiny devil''')
+                if 'Hop' in hero.party:
+                    printInner('''Hop agrees wholeheartedly with this decision and follows you''')
+                break
+            elif ans.upper() == 'C':
+                hero.change_align(4)
+                printInner('''The badger does not say hello back. Rude''')
+                printInner('''But he seems to be pleased with your politeness''')
+                printInner('''The animal turns away and trots into the woods''')
+                if 'Hop' in hero.party:
+                    printTalk('''We dodged a bullet there!''')
+                printInner('''You follow the badger into the woods, but he knows (and probably owns) the place, so you lose him immediately''')
+                break
+            elif ans.upper() == 'D':
+                printInner('''You try to tackle the badger''')
+                if 'Hop' in hero.party:
+                    printTalk('NOOO!')
+                    printInner('''Hop shouts, but you are unstoppable''')
+                printInner('''The beast is surprisingly agile!''')
+                printInner('''He slithers its way from your attempts to grapple him and bites your hand''')
+                printInner('''You feel a sharp pain, look down on the badger...''')
+                printInner('''He is currently running away with''')
+                printInner('YOUR HAND')
+                printInner('''in his teeth...''')
+                printInner('''The badger ate your hand. You scream and run into the woods''')
+                hero.remove_hand()
+                if 'Hop' in hero.party:
+                    printInner('''You hear Hop running after you. He is also screaming''')
+                break
+    def event2():
+
+
+    def event2():
+        pass
+    def event3():
+        pass
+
+    event = random.randint(1,3)
+    if event == 1:
+        event1()
+    elif event == 2:
+        event2()
+    elif event == 3:
+        event1()
 
 
 def caveOne():
@@ -247,7 +345,7 @@ heroName = input()
 
 def startingPoint():
     global hop
-    hop = Npc('Hop', 'Goblin', 8, ['old coin'], friend=5)
+    hop = Npc('Hop', 'Goblin', 9, ['old coin', 'sword'], friend=5)
 
     print('What race would you like to become?:')
     heroRace = input()
