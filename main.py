@@ -7,10 +7,12 @@ global TIMES_PLAYED
 TIMES_PLAYED = 0
 
 def printTalk(charLine):
+    """Outputs a line spoken by a character, with 1 second break before"""
     time.sleep(1)
     print('--', charLine, '--')
 
 def printInner(innerLine):
+    """Outputs a line of inner monologue, with 1 second break before"""
     time.sleep(1)
     print(innerLine)
 
@@ -29,24 +31,28 @@ class Character:
         return(str(self.name + ' The ' + self.race))
 
     def showYourself(self):
+        """Outputs a message containing the character's name and race"""
         print('I AM {} THE GREAT {}. Witness my power!'.format(self.name, self.race).upper())
 
     def showInventory(self):
+        """Outputs the character's current inventory"""
         print('Currently in your inventory:')
         for item in self.inventory:
             print('* ', item)
 
     def change_hp(self, hpNum):
+        """Changes the character's hit point, positive numbers for damage taken and negative for damage healed"""
         self.hp = self.hp - hpNum
 
 class Protagonist(Character):
-    '''A subclass for the characteristic of the main protagonist, adding alignment and magic as attributes'''
+    """A subclass for the characteristic of the main protagonist, adding alignment and magic as attributes"""
     def __init__(self, name, race, hp, inventory, party, alignment=0, hand=2):
         super().__init__(name, race, hp, inventory)
         self.party = party
         self.alignment = alignment
         self.hand = hand
     def attack_dmg(self):
+        """Outputs the damage caused by the protagonist, random range depending on the number of hands left and the presence of a weapon"""
         if self.hand == 2 and 'sword' in self.inventory:
             return random.randint(5, 7)
         elif self.hand == 1 and 'sword' in self.inventory:
@@ -57,36 +63,41 @@ class Protagonist(Character):
             return random.randint(0, 3)
 
     def change_align(self,  alignNum):
+        """Changes the protagonist allignment, positive numbers for increasing it and negative for decreasing"""
         self.alignment = self.alignment + alignNum
 
     def remove_hand(self):
+        """Changes the number of hands that the protagonist has left"""
         self.hand = self.hand - 1
 
 class Npc(Character):
-    '''A subclass fot the characteristics of npcs, adding friendliness towards the hero as an attribute'''
+    """A subclass fot the characteristics of npcs, adding friendliness towards the hero as an attribute"""
     def __init__(self, name, race, hp, inventory, friend=0):
         super().__init__(name, race, hp, inventory)
         self.friend = friend
 
     def change_friend(self, friendNum):
+        """Changes the friendliness towrads the hero, positive numbers for increasing it and negative for decreasing"""
         self.friend = self.friend + friendNum
 
 class Enemy(Character):
-    '''A subclass for enemies, adding their attack power'''
+    """A subclass for enemies, adding their attack power"""
     def __init__(self, name, race, hp, inventory, power):
         super().__init__(name, race, hp, inventory)
         self.power = power
 
     def enemy_rage(self):
+        """Changes the enemy's power levels if enraged"""
         self.power = self.power * 2
 
     def attack_dmg(self):
+        """Outputs the enemy's damage, random range depending on the power level"""
         return int(random.randint(4,6) * self.power)
 
 
 
 # attacker is the one attacking first
-def fight(attacker, defender):  #  dodac object hints, musi byc to character class
+def fight(attacker, defender):
     while not attacker.hp <= 0:
         # attacker attacks
         if isinstance(attacker, Protagonist):
@@ -296,7 +307,7 @@ def meadow():
                         fight(hero, bad_hop)
                     else:
                         fight(bad_hop, hero)
-
+#HERE I AM NOW
 
     def event3():
         pass
